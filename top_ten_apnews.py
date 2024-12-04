@@ -27,9 +27,7 @@ def get_apnews_articles(team_name):
     
     return article_links
 
-# # Example usage for Chicago Bulls
-# team = "Chicago Bulls"
-# articles = get_apnews_articles(team)
-# print(f"Top 10 articles for {team}:")
-# for idx, link in enumerate(articles, start=1):
-#     print(f"Article {idx}: {link}")
+# Example usage for Chicago Bulls
+team = "Chicago Bulls"
+articles = get_apnews_articles(team)
+print(articles)

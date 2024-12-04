@@ -102,7 +102,6 @@ def scrape_espn_articles(team_name, max_retries=3):
     return []
 
 # Example Usage
-team_name = "Orlando Magic"
+team_name = "Chicago Bulls"
 articles = scrape_espn_articles(team_name)
-print(f"Articles for {team_name}:")
 print(articles)
