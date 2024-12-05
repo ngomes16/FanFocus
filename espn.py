@@ -52,7 +52,6 @@ def get_espn_url(team_name):
 
 def scrape_espn_articles(team_name, max_retries=3):
 
-    # Get the ESPN URL for the team
     url = get_espn_url(team_name)
     
     # Headers to mimic a browser
@@ -63,20 +62,16 @@ def scrape_espn_articles(team_name, max_retries=3):
     
     for attempt in range(max_retries):
         try:
-            # Make the GET request
             response = requests.get(url, headers=headers)
             response.raise_for_status()  # Raise HTTPError for bad responses (4xx or 5xx)
             
-            # Parse the HTML content
             soup = BeautifulSoup(response.content, "html.parser")
             
-            # Locate the specific layout container
             layout_column = soup.find("div", class_="layout__column layout__column--2")
             if not layout_column:
                 print("Could not find the target layout column.")
                 return []
 
-            # Find all article tags within this container
             articles = layout_column.find_all("article", class_="contentItem")
             article_links = []
             
@@ -101,7 +96,6 @@ def scrape_espn_articles(team_name, max_retries=3):
     print(f"Failed to fetch articles for {team_name} after {max_retries} attempts.")
     return []
 
-# Example Usage
 team_name = "Chicago Bulls"
 articles = scrape_espn_articles(team_name)
 print(articles)

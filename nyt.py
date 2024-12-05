@@ -3,7 +3,6 @@ from bs4 import BeautifulSoup
 import re
 
 def scrape_nytimes(team_name):
-    # Convert team name to lowercase and replace spaces with hyphens for URL formatting
     team_link_code = team_name.lower().split()[-1]
     url = f"https://www.nytimes.com/athletic/nba/team/{team_link_code}/"
 
@@ -17,7 +16,6 @@ def scrape_nytimes(team_name):
 
     links = []
 
-    # Look for the root container first
     root_container = soup.find("div", class_="root")
     if root_container:
         # Main Section: sc-d0a99dee-0 jBLEZz
@@ -38,9 +36,9 @@ def scrape_nytimes(team_name):
     return links
 
 
-# Example Usage
-team_name = "Orlando Magic"  # Example team name
+
+team_name = "Orlando Magic"  
 extracted_links = scrape_nytimes(team_name)
 
-# Output the results
+
 print(extracted_links)
