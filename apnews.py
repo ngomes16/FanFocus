@@ -22,6 +22,34 @@ def get_apnews_articles(team_name):
     
     return article_links
 
-team = "Chicago Bulls"
-articles = get_apnews_articles(team)
-print(articles)
+def get_apnews_article_details(article_links):
+    articles = {}
+    
+    for link in article_links:
+        response = requests.get(link)
+        soup = BeautifulSoup(response.content, 'html.parser')
+        
+        # Extract the title
+        title_tag = soup.find('h1', class_='Page-headline')
+        title = title_tag.get_text(strip=True) if title_tag else None
+        
+        # Extract the article content
+        content_div = soup.find('div', class_='RichTextStoryBody RichTextBody')
+        paragraphs = content_div.find_all('p') if content_div else []
+        content = " ".join(paragraph.get_text(strip=True) for paragraph in paragraphs)
+        
+        if title and content:
+            articles[title] = content
+
+    return articles
+
+
+
+team_name = "Orlando Magic"
+article_links = get_apnews_articles(team_name)  
+article_details = get_apnews_article_details(article_links)
+
+
+for title, content in article_details.items():
+    print(f"Title: {title}")
+    print(f"Content: {content}\n")

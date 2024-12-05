@@ -96,6 +96,45 @@ def scrape_espn_articles(team_name, max_retries=3):
     print(f"Failed to fetch articles for {team_name} after {max_retries} attempts.")
     return []
 
+def get_espn_article_details(article_links):
+    articles = {}
+
+    for link in article_links:
+        try:
+            # Request the article page
+            response = requests.get(link, headers=headers)
+            response.raise_for_status()
+            soup = BeautifulSoup(response.content, "html.parser")
+
+            # Extract the title from the header
+            header = soup.find("header", class_="article-header")
+            title_tag = header.find("h1") if header else None
+            title = title_tag.get_text(strip=True) if title_tag else None
+
+            # Extract the content from the article body
+            body = soup.find("div", class_="article-body")
+            paragraphs = body.find_all("p") if body else []
+            content = " ".join(paragraph.get_text(strip=True) for paragraph in paragraphs)
+
+            # Add the title and content to the dictionary if both exist
+            if title and content:
+                articles[title] = content
+
+        except HTTPError as e:
+            print(f"HTTP error while fetching article {link}: {e}")
+        except Exception as e:
+            print(f"An error occurred while processing article {link}: {e}")
+
+    return articles
+
+
+# Example usage
 team_name = "Chicago Bulls"
-articles = scrape_espn_articles(team_name)
-print(articles)
+article_links = scrape_espn_articles(team_name)  # Use the ESPN scraping function
+article_details = get_espn_article_details(article_links)
+
+# Output the results
+for title, content in article_details.items():
+    print(f"Title: {title}")
+    print(f"Content: {content}\n")
+
