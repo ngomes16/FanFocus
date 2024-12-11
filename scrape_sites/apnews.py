@@ -1,6 +1,5 @@
 import requests
 from bs4 import BeautifulSoup
-import re
 
 def get_apnews_articles(team_name):
     formatted_team_name = team_name.lower().replace(" ", "+")
@@ -29,27 +28,19 @@ def get_apnews_article_details(article_links):
         response = requests.get(link)
         soup = BeautifulSoup(response.content, 'html.parser')
         
-        # Extract the title
-        title_tag = soup.find('h1', class_='Page-headline')
-        title = title_tag.get_text(strip=True) if title_tag else None
-        
         # Extract the article content
         content_div = soup.find('div', class_='RichTextStoryBody RichTextBody')
         paragraphs = content_div.find_all('p') if content_div else []
         content = " ".join(paragraph.get_text(strip=True) for paragraph in paragraphs)
         
-        if title and content:
-            articles[title] = content
+        if content:
+            articles[link] = content
 
     return articles
-
 
 
 team_name = "Chicago Bears"
 article_links = get_apnews_articles(team_name)  
 article_details = get_apnews_article_details(article_links)
 
-
-for title, content in article_details.items():
-    print(f"Title: {title}")
-    print(f"Content: {content}\n")
+print (article_details)
