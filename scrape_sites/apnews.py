@@ -45,7 +45,7 @@ def get_apnews_article_details(article_links):
 
 
 
-team_name = "Orlando Magic"
+team_name = "Chicago Bears"
 article_links = get_apnews_articles(team_name)  
 article_details = get_apnews_article_details(article_links)
 

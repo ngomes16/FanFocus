@@ -3,7 +3,7 @@ from bs4 import BeautifulSoup
 import time
 from requests.exceptions import HTTPError
 
-team_data = {
+nba_data = {
     "Atlanta Hawks": "atl",
     "Boston Celtics": "bos",
     "Brooklyn Nets": "bkn",
@@ -33,8 +33,44 @@ team_data = {
     "San Antonio Spurs": "sa",
     "Toronto Raptors": "tor",
     "Utah Jazz": "utah",
-    "Washington Wizards": "wsh",
+    "Washington Wizards": "wsh"
 }
+
+nfl_data = {
+    "Arizona Cardinals": "ari",
+    "Atlanta Falcons": "atl",
+    "Baltimore Ravens": "bal",
+    "Buffalo Bills": "buf",
+    "Carolina Panthers": "car",
+    "Chicago Bears": "chi",
+    "Cincinnati Bengals": "cin",
+    "Cleveland Browns": "cle",
+    "Dallas Cowboys": "dal",
+    "Denver Broncos": "den",
+    "Detroit Lions": "det",
+    "Green Bay Packers": "gb",
+    "Houston Texans": "hou",
+    "Indianapolis Colts": "ind",
+    "Jacksonville Jaguars": "jax",
+    "Kansas City Chiefs": "kc",
+    "Las Vegas Raiders": "lv",
+    "Los Angeles Chargers": "lac",
+    "Los Angeles Rams": "lar",
+    "Miami Dolphins": "mia",
+    "Minnesota Vikings": "min",
+    "New England Patriots": "ne",
+    "New Orleans Saints": "no",
+    "New York Giants": "nyg",
+    "New York Jets": "nyj",
+    "Philadelphia Eagles": "phi",
+    "Pittsburgh Steelers": "pit",
+    "San Francisco 49ers": "sf",
+    "Seattle Seahawks": "sea",
+    "Tampa Bay Buccaneers": "tb",
+    "Tennessee Titans": "ten",
+    "Washington Commanders": "wsh"
+}
+
 
 # Headers to mimic a browser
 headers = {
@@ -43,11 +79,16 @@ headers = {
 }
 
 def get_espn_url(team_name):
-    if team_name not in team_data:
-        raise ValueError(f"Team '{team_name}' not found in team_data.")
-    city_code = team_data[team_name]
+    if team_name in nba_data:
+        league = "nba"
+        city_code = nba_data[team_name]
+    elif team_name in nfl_data:
+        league = "nfl"
+        city_code = nfl_data[team_name]
+    else:
+        raise ValueError(f"Team '{team_name}' not found in NBA or NFL data.")
     espn_team_name = team_name.lower().replace(" ", "-")
-    return f"https://www.espn.com/nba/team/_/name/{city_code}/{espn_team_name}"
+    return f"https://www.espn.com/{league}/team/_/name/{city_code}/{espn_team_name}"
 
 
 def scrape_espn_articles(team_name, max_retries=3):
@@ -129,7 +170,7 @@ def get_espn_article_details(article_links):
 
 
 # Example usage
-team_name = "Chicago Bulls"
+team_name = "Chicago Bears"
 article_links = scrape_espn_articles(team_name)  # Use the ESPN scraping function
 article_details = get_espn_article_details(article_links)
 
