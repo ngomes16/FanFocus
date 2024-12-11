@@ -42,13 +42,13 @@
 .upvote-icon {
   position: absolute;
   top: 50%;
-  left: 10%;
+  right: 10%;
 }
 
 .downvote-icon {
   position: absolute;
   top: 50%;
-  right: 10%;
+  left: 10%;
 }
 
 .NextButton{
