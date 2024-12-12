@@ -1,0 +1,11 @@
+name: fanfocus
+channels:
+  - defaults
+dependencies:
+  - python=3.8
+  - flask
+  - scikit-learn
+  - scipy
+  - nltk
+  - numpy
+  - pip
