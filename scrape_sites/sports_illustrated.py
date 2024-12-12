@@ -149,8 +149,3 @@ def extract_si_articles(link_list):
             print(f"Error fetching {link}: {e}")
 
     return articles
-
-bears_links = get_si_article_links("Chicago Bears")
-articles = extract_si_articles(bears_links)
-
-print(articles)

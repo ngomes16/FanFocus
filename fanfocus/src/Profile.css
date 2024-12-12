@@ -1,53 +1,60 @@
 .App {
   position: relative;
-  height: 100vh; 
+  height: 100vh;
   background-color: rgb(13, 40, 86);
+  display: flex;
+  flex-direction: column;
 }
 
-.profile-icon {
-  position: absolute;
-  top: 20px;
-  right: 20px;
-  cursor: pointer;
+.main-container {
+  display: flex;
+  height: 100%;
+  margin-top: 150px;
 }
 
-.home-icon {
-  position: absolute;
-  top: 20px;
-  left: 20px;
-  cursor: pointer;
-}
-
-.FanFocus {
-  position: absolute;
-  top: 20px; 
-  left: 50%; 
-  transform: translateX(-50%); 
-  font-size: 48px; 
+.teams-section {
+  width: 25%;
+  background-color: rgb(13, 40, 86); 
   color: white; 
-  font-family: Arial, sans-serif; 
+  padding: 20px;
+  overflow-y: auto;
+  max-height: calc(90vh - 150px);
+  border-right: 2px solid rgba(255, 255, 255, 0.1); 
 }
 
-.PageName {
-  position: absolute;
-  top: 100px;
-  left: 50%;
-  transform: translateX(-50%); 
-  font-size: 30px;
+.teams-list {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+
+.team-button {
+  padding: 5px 10px; 
+  font-size: 12px; 
+  border: none;
+  border-radius: 5px;
+  background-color: transparent; 
   color: white; 
-  font-family: Arial, sans-serif; 
+  cursor: pointer;
+  text-align: left;
+  transition: background-color 0.3s, color 0.3s; 
 }
 
+.team-button:hover {
+  background-color: rgba(255, 255, 255, 0.1); 
+}
 
+.team-button.selected {
+  background-color: rgba(255, 255, 255, 0.2); 
+}
+
+/* Interests Section */
 .interests-section {
-  position: absolute;
-  top: 200px;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 80%;
-  max-width: 600px;
+  width: 75%;
   text-align: center;
   color: white;
+  padding: 20px;
 }
 
 .input-container {
@@ -65,10 +72,6 @@
   border-radius: 5px;
   background: transparent;
   color: white;
-}
-
-.interest-input::placeholder {
-  color: rgba(255, 255, 255, 0.7);
 }
 
 .add-button {
@@ -98,11 +101,10 @@
   color: rgb(13, 40, 86);
   border-radius: 5px;
   font-size: 18px;
-  cursor: pointer; /* Show pointer to indicate it's clickable */
-  transition: background-color 0.3s ease;
+  cursor: pointer;
 }
 
 .interest-item:hover {
-  background-color: rgba(255, 0, 0, 0.8); /* Change color on hover to indicate removal */
-  color: white; /* Make text white for contrast */
+  background-color: rgba(255, 0, 0, 0.8);
+  color: white;
 }

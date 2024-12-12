@@ -2,16 +2,40 @@ import React, { useState, useEffect } from 'react';
 import { IoHomeOutline, IoPersonOutline } from "react-icons/io5";
 import './Profile.css';
 
+const nbaTeams = [
+  "Atlanta Hawks", "Boston Celtics", "Brooklyn Nets", "Charlotte Hornets", 
+  "Chicago Bulls", "Cleveland Cavaliers", "Dallas Mavericks", "Denver Nuggets", 
+  "Detroit Pistons", "Golden State Warriors", "Houston Rockets", "Indiana Pacers", 
+  "LA Clippers", "Los Angeles Lakers", "Memphis Grizzlies", "Miami Heat", 
+  "Milwaukee Bucks", "Minnesota Timberwolves", "New Orleans Pelicans", 
+  "New York Knicks", "Oklahoma City Thunder", "Orlando Magic", 
+  "Philadelphia 76ers", "Phoenix Suns", "Portland Trail Blazers", 
+  "Sacramento Kings", "San Antonio Spurs", "Toronto Raptors", 
+  "Utah Jazz", "Washington Wizards"
+];
+
+const nflTeams = [
+  "Arizona Cardinals", "Atlanta Falcons", "Baltimore Ravens", "Buffalo Bills", 
+  "Carolina Panthers", "Chicago Bears", "Cincinnati Bengals", "Cleveland Browns", 
+  "Dallas Cowboys", "Denver Broncos", "Detroit Lions", "Green Bay Packers", 
+  "Houston Texans", "Indianapolis Colts", "Jacksonville Jaguars", 
+  "Kansas City Chiefs", "Las Vegas Raiders", "Los Angeles Chargers", 
+  "Los Angeles Rams", "Miami Dolphins", "Minnesota Vikings", 
+  "New England Patriots", "New Orleans Saints", "New York Giants", 
+  "New York Jets", "Philadelphia Eagles", "Pittsburgh Steelers", 
+  "San Francisco 49ers", "Seattle Seahawks", "Tampa Bay Buccaneers", 
+  "Tennessee Titans", "Washington Commanders"
+];
+
 function Profile() {
   const [interests, setInterests] = useState(() => {
-    // Retrieve saved interests from localStorage when the component mounts
     const savedInterests = localStorage.getItem('interests');
     return savedInterests ? JSON.parse(savedInterests) : [];
   });
   const [inputValue, setInputValue] = useState('');
+  const [selectedTeams, setSelectedTeams] = useState([]);
 
   useEffect(() => {
-    // Save interests to localStorage whenever the `interests` state changes
     localStorage.setItem('interests', JSON.stringify(interests));
   }, [interests]);
 
@@ -27,51 +51,89 @@ function Profile() {
     setInterests(filteredInterests);
   };
 
+  const toggleTeamSelection = (team) => {
+    if (selectedTeams.includes(team)) {
+      setSelectedTeams(selectedTeams.filter((t) => t !== team));
+    } else {
+      setSelectedTeams([...selectedTeams, team]);
+      if (!interests.includes(team)) {
+        setInterests([...interests, team]);
+      }
+    }
+  };
+
   return (
     <div className="App">
-      {/* Home Icon */}
       <IoHomeOutline
         size={50}
         color="white"
         className="home-icon"
-        onClick={() => window.location = '/'}
+        onClick={() => (window.location = '/')}
       />
-      
       <IoPersonOutline
         size={50}
         color="white"
         className="profile-icon"
-        onClick={() => window.location = '/profile'}
+        onClick={() => (window.location = '/profile')}
       />
-      
       <div className="FanFocus">FanFocus</div>
       <div className="PageName">Profile</div>
-      
-      {/* Interests Section */}
-      <div className="interests-section">
-        <h2>Your Interests</h2>
-        <div className="input-container">
-          <input
-            type="text"
-            value={inputValue}
-            onChange={(e) => setInputValue(e.target.value)}
-            placeholder="Enter an interest"
-            className="interest-input"
-          />
-          <button onClick={handleAddInterest} className="add-button">Add</button>
+
+      <div className="main-container">
+        {/* Teams List Section */}
+        <div className="teams-section">
+          <h3>NBA Teams</h3>
+          <div className="teams-list">
+            {nbaTeams.map((team, index) => (
+              <button
+                key={index}
+                className={`team-button ${selectedTeams.includes(team) ? 'selected' : ''}`}
+                onClick={() => toggleTeamSelection(team)}
+              >
+                {team}
+              </button>
+            ))}
+          </div>
+          <h3>NFL Teams</h3>
+          <div className="teams-list">
+            {nflTeams.map((team, index) => (
+              <button
+                key={index}
+                className={`team-button ${selectedTeams.includes(team) ? 'selected' : ''}`}
+                onClick={() => toggleTeamSelection(team)}
+              >
+                {team}
+              </button>
+            ))}
+          </div>
         </div>
-        <ul className="interests-list">
-          {interests.map((interest, index) => (
-            <li 
-              key={index} 
-              className="interest-item"
-              onClick={() => handleRemoveInterest(index)} // Remove interest on click
-              title="Click to remove"
-            >
-              {interest}
-            </li>
-          ))}
-        </ul>
+
+        {/* Interests Section */}
+        <div className="interests-section">
+          <h2>Your Interests</h2>
+          <div className="input-container">
+            <input
+              type="text"
+              value={inputValue}
+              onChange={(e) => setInputValue(e.target.value)}
+              placeholder="Enter an interest"
+              className="interest-input"
+            />
+            <button onClick={handleAddInterest} className="add-button">Add</button>
+          </div>
+          <ul className="interests-list">
+            {interests.map((interest, index) => (
+              <li
+                key={index}
+                className="interest-item"
+                onClick={() => handleRemoveInterest(index)}
+                title="Click to remove"
+              >
+                {interest}
+              </li>
+            ))}
+          </ul>
+        </div>
       </div>
     </div>
   );

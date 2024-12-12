@@ -158,10 +158,3 @@ def get_espn_article_details(article_links):
             print(f"An error occurred while processing article {link}: {e}")
 
     return articles
-
-# Example usage
-team_name = "Chicago Bears"
-article_links = scrape_espn_articles(team_name)  # Use the ESPN scraping function
-article_details = get_espn_article_details(article_links)
-
-print(article_details)

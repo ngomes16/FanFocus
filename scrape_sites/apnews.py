@@ -37,10 +37,3 @@ def get_apnews_article_details(article_links):
             articles[link] = content
 
     return articles
-
-
-team_name = "Chicago Bears"
-article_links = get_apnews_articles(team_name)  
-article_details = get_apnews_article_details(article_links)
-
-print (article_details)
