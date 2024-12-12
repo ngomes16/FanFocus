@@ -1,4 +1,6 @@
 import json
+import os
+import traceback
 from flask import Flask, request, jsonify
 from sports_illustrated import get_si_article_links, extract_si_articles
 from espn import scrape_espn_articles, get_espn_article_details
@@ -32,14 +34,57 @@ nflTeams = [
 ]
 
 import json
-import os
-import traceback
-from flask import Flask, request, jsonify
-from sports_illustrated import get_si_article_links, extract_si_articles
-from espn import scrape_espn_articles, get_espn_article_details
-from apnews import get_apnews_articles, get_apnews_article_details
 
-app = Flask(__name__)
+def transform_brackets(json_data):
+    # Convert JSON data to string for manipulation
+    json_str = json.dumps(json_data)
+    
+    # Find positions of the first and last square brackets
+    first_square_bracket = json_str.find('[')
+    last_square_bracket = json_str.rfind(']')
+    
+    # Create a new list to hold the transformed string
+    transformed_data = []
+    start = 0
+    
+    # Loop through the string to replace brackets
+    while start < len(json_str):
+        if start == first_square_bracket:
+            # Convert the first square bracket to '('
+            transformed_data.append('(')
+            start += 1
+            first_square_bracket = -1  # Mark the first bracket as handled
+        elif start == last_square_bracket:
+            # Convert the last square bracket to ')'
+            transformed_data.append(')')
+            break  # End the loop as we've handled the last bracket
+        elif json_str[start] == '[':
+            # Convert intermediate square brackets to '('
+            transformed_data.append('(')
+            start += 1
+        elif json_str[start] == ']':
+            # Convert intermediate square brackets to ')'
+            transformed_data.append(')')
+            start += 1
+        else:
+            # Append each character to the transformed list
+            transformed_data.append(json_str[start])
+            start += 1
+
+    # Join the transformed string into a final string
+    transformed_str = ''.join(transformed_data)
+
+    # Replace every instance of "), (" with "),\n("
+    transformed_str = transformed_str.replace('), (', '),\n(')
+
+    # Remove the first and last characters
+    transformed_str = transformed_str[1:-1]
+
+    # Add '[' to the beginning and ']' to the end
+    transformed_str = f'[{transformed_str}]'
+
+    return transformed_str
+
 
 
 def scrape_articles(team_names):
@@ -80,17 +125,20 @@ def scrape_articles_route():
         
         # Scrape articles for the selected teams
         articles = scrape_articles(team_names)
+        formatted_articles = [list(article) for article in articles]
         
         print(f"Total articles scraped: {len(articles)}")  # Add print statement
+        
+        # Transform the brackets in the formatted articles
+        transformed_articles_str = transform_brackets(formatted_articles)
         
         # Determine the full file path
         file_path = os.path.join(os.getcwd(), 'articles.json')
         print(f"Attempting to write to: {file_path}")  # Debug print
         
-        # Save articles to articles.json
+        # Save the transformed articles to articles.json
         with open(file_path, 'w', encoding='utf-8') as f:
-            # Write the articles as a list of tuples (URL, content)
-            json.dump(articles, f, ensure_ascii=False, indent=2)
+            f.write(transformed_articles_str)
         
         return jsonify({
             "message": "Articles fetched and saved successfully.", 
@@ -99,7 +147,6 @@ def scrape_articles_route():
         })
     except Exception as e:
         print(f"Error in scrape_articles_route: {str(e)}")  # Add detailed error logging
-        import traceback
         traceback.print_exc()  # Print full stack trace
         return jsonify({"error": str(e)}), 500
 
