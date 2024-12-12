@@ -39,6 +39,7 @@ function Profile() {
     localStorage.setItem('interests', JSON.stringify(interests));
   }, [interests]);
 
+  // Add a new interest (team name)
   const handleAddInterest = () => {
     if (inputValue.trim() !== '') {
       setInterests([...interests, inputValue.trim()]);
@@ -46,11 +47,13 @@ function Profile() {
     }
   };
 
+  // Remove an interest
   const handleRemoveInterest = (indexToRemove) => {
     const filteredInterests = interests.filter((_, index) => index !== indexToRemove);
     setInterests(filteredInterests);
   };
 
+  // Toggle team selection
   const toggleTeamSelection = (team) => {
     if (selectedTeams.includes(team)) {
       setSelectedTeams(selectedTeams.filter((t) => t !== team));
@@ -59,6 +62,34 @@ function Profile() {
       if (!interests.includes(team)) {
         setInterests([...interests, team]);
       }
+    }
+  };
+
+  const fetchArticles = async () => {
+    try {
+      const validTeams = interests.filter(team => nbaTeams.includes(team) || nflTeams.includes(team));
+      console.log('Valid Teams to scrape:', validTeams);
+      
+      const response = await fetch('/scrape_articles', {
+        method: 'POST',
+        headers: { 
+          'Content-Type': 'application/json',
+          'Accept': 'application/json'
+        },
+        body: JSON.stringify({ teamNames: validTeams })
+      });
+  
+      if (!response.ok) {
+        const errorData = await response.json();
+        console.error('Server error:', errorData);
+        throw new Error(errorData.error || 'Failed to fetch articles');
+      }
+  
+      const data = await response.json();
+      console.log('Response from backend:', data);
+    } catch (error) {
+      console.error('Detailed Error:', error);
+      alert(`Error fetching articles: ${error.message}`);
     }
   };
 
@@ -133,6 +164,11 @@ function Profile() {
               </li>
             ))}
           </ul>
+        </div>
+
+        {/* Action Button */}
+        <div className="fetch-articles-section">
+          <button onClick={fetchArticles}>Fetch Articles</button>
         </div>
       </div>
     </div>

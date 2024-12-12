@@ -22,18 +22,30 @@ def get_apnews_articles(team_name):
     return article_links
 
 def get_apnews_article_details(article_links):
-    articles = {}
-    
+    headers = {
+        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/114.0.0.0 Safari/537.36",
+        "Accept-Language": "en-US,en;q=0.9",
+    }
+
+    articles = []
+
     for link in article_links:
-        response = requests.get(link)
-        soup = BeautifulSoup(response.content, 'html.parser')
-        
-        # Extract the article content
-        content_div = soup.find('div', class_='RichTextStoryBody RichTextBody')
-        paragraphs = content_div.find_all('p') if content_div else []
-        content = " ".join(paragraph.get_text(strip=True) for paragraph in paragraphs)
-        
-        if content:
-            articles[link] = content
+        try:
+            response = requests.get(link, headers=headers)
+            response.raise_for_status()
+            soup = BeautifulSoup(response.content, "html.parser")
+
+            content_div = soup.find('div', class_='RichTextStoryBody RichTextBody')
+            paragraphs = content_div.find_all('p') if content_div else []
+            content = " ".join(paragraph.get_text(strip=True) for paragraph in paragraphs)
+
+            if content:
+                articles.append((link, content))
+
+        except requests.exceptions.HTTPError as e:
+            print(f"HTTP error while fetching article {link}: {e}")
+        except Exception as e:
+            print(f"An error occurred while processing article {link}: {e}")
 
     return articles
+
