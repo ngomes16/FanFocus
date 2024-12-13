@@ -1,0 +1,110 @@
+.App {
+  position: relative;
+  height: 100vh;
+  background-color: rgb(13, 40, 86);
+  display: flex;
+  flex-direction: column;
+}
+
+.main-container {
+  display: flex;
+  height: 100%;
+  margin-top: 150px;
+}
+
+.teams-section {
+  width: 25%;
+  background-color: rgb(13, 40, 86); 
+  color: white; 
+  padding: 20px;
+  overflow-y: auto;
+  max-height: calc(90vh - 150px);
+  border-right: 2px solid rgba(255, 255, 255, 0.1); 
+}
+
+.teams-list {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+
+.team-button {
+  padding: 5px 10px; 
+  font-size: 12px; 
+  border: none;
+  border-radius: 5px;
+  background-color: transparent; 
+  color: white; 
+  cursor: pointer;
+  text-align: left;
+  transition: background-color 0.3s, color 0.3s; 
+}
+
+.team-button:hover {
+  background-color: rgba(255, 255, 255, 0.1); 
+}
+
+.team-button.selected {
+  background-color: rgba(255, 255, 255, 0.2); 
+}
+
+/* Interests Section */
+.interests-section {
+  width: 75%;
+  text-align: center;
+  color: white;
+  padding: 20px;
+}
+
+.input-container {
+  margin-top: 20px;
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+}
+
+.interest-input {
+  width: 70%;
+  padding: 10px;
+  font-size: 16px;
+  border: 2px solid white;
+  border-radius: 5px;
+  background: transparent;
+  color: white;
+}
+
+.add-button {
+  padding: 10px 20px;
+  font-size: 16px;
+  border: none;
+  border-radius: 5px;
+  background-color: white;
+  color: rgb(13, 40, 86);
+  cursor: pointer;
+}
+
+.add-button:hover {
+  background-color: rgba(255, 255, 255, 0.8);
+}
+
+.interests-list {
+  margin-top: 20px;
+  list-style-type: none;
+  padding: 0;
+}
+
+.interest-item {
+  padding: 10px;
+  margin: 5px 0;
+  background-color: white;
+  color: rgb(13, 40, 86);
+  border-radius: 5px;
+  font-size: 18px;
+  cursor: pointer;
+}
+
+.interest-item:hover {
+  background-color: rgba(255, 0, 0, 0.8);
+  color: white;
+}
