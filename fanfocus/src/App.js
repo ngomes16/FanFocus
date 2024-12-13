@@ -7,71 +7,172 @@ import './App.css';
 function App() {
   const navigate = useNavigate();
 
-  // State to hold articles and the current article index
-  const [articles, setArticles] = useState([]);
-  const [currentIndex, setCurrentIndex] = useState(0);
 
+  const [articlesQueue, setArticlesQueue] = useState([]);
+  const [currentIndex, setCurrentIndex] = useState(0);
 
   useEffect(() => {
     const fetchArticles = async () => {
       try {
-        const response = await fetch('articles.json');
+        const response = await fetch('/articles/one?k=5'); 
         const data = await response.json();
 
-        // Randomize the order of articles
-        const randomizedArticles = data.sort(() => Math.random() - 0.5);
-        setArticles(randomizedArticles);
+        if (data.length > 0) {
+          
+          setArticlesQueue((prevQueue) => [...prevQueue, ...data]);
+        } else {
+          console.error('No articles found or relevant articles available.');
+        }
       } catch (error) {
         console.error('Error fetching articles:', error);
       }
     };
 
-    fetchArticles();
-  }, []);
+    // Fetch articles if queue is empty
+    if (articlesQueue.length === 0) {
+      fetchArticles();
+    }
+  }, [articlesQueue]); 
 
-  const handleVote = () => {
-  
-    if (currentIndex < articles.length - 1) {
+  const handleVote = async (feedback) => {
+    const articleId = articlesQueue[currentIndex].id; 
+
+    try {
+      const response = await fetch(`/article/one/${articleId}/feedback`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ vote: feedback }), 
+      });
+
+      if (response.ok) {
+        console.log(`Feedback recorded: ${feedback === 1 ? 'Upvote' : 'Downvote'}`);
+      } else {
+        console.error('Failed to record feedback');
+      }
+    } catch (error) {
+      console.error('Error sending feedback:', error);
+    }
+
+    if (currentIndex < articlesQueue.length - 1) {
+
+      await trackArticleAsSeen(articleId);
+    
       setCurrentIndex(currentIndex + 1);
-    } else {
-      alert("No more articles to display."); 
+    } else if (articlesQueue.length === 1) {
+
+      console.log('Fetching more articles');
+      fetchArticles();
+    } 
+  };
+
+  const trackArticleAsSeen = async (articleId) => {
+    try {
+      const response = await fetch(`/article/one/${articleId}/seen`, {
+        method: 'POST',
+      });
+
+      if (response.ok) {
+        console.log(`Article ${articleId} marked as seen.`);
+      } else {
+        console.error('Failed to mark article as seen');
+      }
+    } catch (error) {
+      console.error('Error marking article as seen:', error);
+    }
+  };
+
+  const fetchArticles = async () => {
+    try {
+      const response = await fetch('/articles/one?k=5'); 
+      const data = await response.json();
+
+      if (data.length > 0) {
+        
+        setArticlesQueue((prevQueue) => [...prevQueue, ...data]);
+        setCurrentIndex(0); 
+      } else {
+        console.error('No articles found or relevant articles available.');
+      }
+    } catch (error) {
+      console.error('Error fetching articles:', error);
+    }
+  };
+
+  
+  const removeArticleFromQueue = () => {
+    setArticlesQueue((prevQueue) => prevQueue.slice(1)); 
+    setCurrentIndex(0); 
+  };
+
+  
+  useEffect(() => {
+    if (articlesQueue.length > 0) {
+      console.log('Current queue state:', articlesQueue);
+    }
+  }, [currentIndex, articlesQueue]); 
+
+  const resetSeenArticles = async () => {
+    try {
+      const response = await fetch('/user/one/reset-seen', {
+        method: 'POST',
+      });
+
+      if (response.ok) {
+        console.log('Seen articles reset successfully');
+        
+        setArticlesQueue([]);
+        setCurrentIndex(0); 
+        
+        navigate('/profile');
+      } else {
+        console.error('Failed to reset seen articles');
+      }
+    } catch (error) {
+      console.error('Error resetting seen articles:', error);
     }
   };
 
   return (
     <div className="App">
-
       <IoHomeOutline size={50} color="white" className="home-icon" onClick={() => navigate('/')} />
       <div className="FanFocus">FanFocus</div>
       <div className="PageName">Home</div>
-      <IoPersonOutline size={50} color="white" className="profile-icon" onClick={() => navigate('/profile')} />
+      <IoPersonOutline 
+        size={50} 
+        color="white" 
+        className="profile-icon" 
+        onClick={resetSeenArticles} 
+      />
 
 
       <div className="ArticleContent">
-        {articles.length > 0 ? (
+        {articlesQueue.length > 0 && articlesQueue[currentIndex] ? (
           <>
-            <p>{articles[currentIndex][1]}</p> {/* Display article content */}
-            <a href={articles[currentIndex][0]} target="_blank" rel="noopener noreferrer">
-              {articles[currentIndex][0]}
-            </a> 
+            <p>{articlesQueue[currentIndex]?.excerpt || "No excerpt available"}</p> 
+            <a href={articlesQueue[currentIndex]?.url || "#"} target="_blank" rel="noopener noreferrer">
+              {articlesQueue[currentIndex]?.url || "No URL available"}
+            </a>
           </>
         ) : (
           <p>Loading articles...</p>
         )}
       </div>
 
+
       <div className="VoteButtons">
         <BiUpvote
           size={50}
           color="white"
           className="upvote-icon"
-          onClick={handleVote}
+          onClick={() => handleVote(1)} 
         />
         <BiDownvote
           size={50}
           color="white"
           className="downvote-icon"
-          onClick={handleVote}
+          onClick={() => handleVote(0)} 
         />
       </div>
     </div>

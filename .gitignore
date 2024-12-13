@@ -1,5 +1,7 @@
-/data/
-
+/data/nltk_data
+/data/tfidf_data.pkl
+/data/inverted_index.json
+/data/articles.json
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]

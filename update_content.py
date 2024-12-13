@@ -79,10 +79,11 @@ def update_content(new_articles, inverted_index_path='data/inverted_index.json',
     all_documents = [article['text'] for article in articles.values()]
     new_article_ids = []
     for i, (url, text) in enumerate(new_articles):
-        new_id = str(latest_id + 1 + i)
-        articles[new_id] = {'url': url, 'text': text}
-        all_documents.append(text)
-        new_article_ids.append(new_id)
+        if len(text) < 20000:
+            new_id = str(latest_id + 1 + i)
+            articles[new_id] = {'url': url, 'text': text}
+            all_documents.append(text)
+            new_article_ids.append(new_id)
 
     vectorizer.fit(all_documents)
 

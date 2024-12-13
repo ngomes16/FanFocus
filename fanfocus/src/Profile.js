@@ -39,7 +39,7 @@ function Profile() {
     localStorage.setItem('interests', JSON.stringify(interests));
   }, [interests]);
 
-  // Add a new interest (team name)
+  // Add a new interest (team name or term)
   const handleAddInterest = () => {
     if (inputValue.trim() !== '') {
       setInterests([...interests, inputValue.trim()]);
@@ -93,6 +93,41 @@ function Profile() {
     }
   };
 
+  const updateKeyTerms = async () => {
+    // Filter out team names from interests
+    const keyTerms = interests;
+  
+    if (keyTerms.length === 0) {
+      alert("No valid key terms to update.");
+      return;
+    }
+  
+    try {
+      const response = await fetch('/user/one/key-terms', {
+        method: 'PUT',
+        headers: { 
+          'Content-Type': 'application/json',
+          'Accept': 'application/json'
+        },
+        body: JSON.stringify({ key_terms: keyTerms })
+      });
+  
+      if (!response.ok) {
+        // Log the status and the response text for debugging
+        const text = await response.text();  // Get raw response text
+        console.error('Error response:', text);
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
+  
+      const data = await response.json();  // This assumes the response is JSON
+      console.log('Key terms update response:', data);
+      alert('Key terms updated successfully!');
+    } catch (error) {
+      console.error('Detailed Error:', error);
+      alert(`Error updating key terms: ${error.message}`);
+    }
+  };
+  
   return (
     <div className="App">
       <IoHomeOutline
@@ -166,9 +201,10 @@ function Profile() {
           </ul>
         </div>
 
-        {/* Action Button */}
-        <div className="fetch-articles-section">
+        {/* Action Buttons */}
+        <div className="action-buttons">
           <button onClick={fetchArticles}>Fetch Articles</button>
+          <button onClick={updateKeyTerms}>Update Key Terms</button>
         </div>
       </div>
     </div>

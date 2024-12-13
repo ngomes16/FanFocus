@@ -1,0 +1,17 @@
+{
+    "one": {
+        "name": "one",
+        "key_terms": [
+            "Detroit Lions",
+            "Campbell"
+        ],
+        "seen_articles": [
+            "144"
+        ],
+        "upvote_downvote_history": {
+            "101": 1,
+            "121": 1,
+            "144": 1
+        }
+    }
+}
