@@ -64,3 +64,5 @@ The software has two pages: the home page, which displays the articles, and the 
 6. **Navigating Back to Home**: To go back to the home screen, click the icon in the top left corner.
 7. **Reading Articles**: On the home page, you can go through articles by clicking the up and down arrows.
 
+NOTE: There is a default user used for testing purposes. For our purposes, it was "one"
+
