@@ -1,0 +1,80 @@
+
+.App {
+  position: relative;
+  height: 100vh; 
+  background-color: rgb(13, 40, 86);
+}
+
+.profile-icon {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  cursor: pointer;
+}
+
+.home-icon {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  cursor: pointer;
+}
+
+.FanFocus {
+  position: absolute;
+  top: 20px; 
+  left: 50%; 
+  transform: translateX(-50%); 
+  font-size: 48px; 
+  color: white; 
+  font-family: Arial, sans-serif; 
+}
+
+.PageName {
+  position: absolute;
+  top: 100px;
+  left: 50%;
+  transform: translateX(-50%); 
+  font-size: 30px;
+  color: white; 
+  font-family: Arial, sans-serif; 
+}
+
+.upvote-icon {
+  position: absolute;
+  top: 50%;
+  right: 10%;
+  cursor: pointer;
+}
+
+.downvote-icon {
+  position: absolute;
+  top: 50%;
+  left: 10%;
+  cursor: pointer;
+}
+
+.NextButton{
+  position: absolute;
+  bottom: 20px;
+  right: 20px;
+  font-size: 30px;
+  color: white; 
+  font-family: Arial, sans-serif;
+}
+
+.ArticleContent {
+  position: absolute;
+  top: 200px; 
+  left: 50%;
+  transform: translateX(-50%); 
+  width: 70%; 
+  max-height: 70%; 
+  text-align: center; 
+  color: white; 
+  font-family: Arial, sans-serif; 
+  font-size: 18px; 
+  line-height: 1.5; 
+  overflow-y: auto; 
+  padding: 10px; 
+  background-color: rgba(0, 0, 0, 0.5); 
+}
