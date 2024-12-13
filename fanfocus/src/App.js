@@ -29,7 +29,6 @@ function App() {
     fetchArticles();
   }, []);
 
-  // Handle voting and move to the next article
   const handleVote = () => {
   
     if (currentIndex < articles.length - 1) {
@@ -61,7 +60,6 @@ function App() {
         )}
       </div>
 
-      {/* Vote Buttons */}
       <div className="VoteButtons">
         <BiUpvote
           size={50}

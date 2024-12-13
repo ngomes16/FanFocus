@@ -161,7 +161,6 @@ def scrape_articles(team_names):
         print(f"Scraping for team: {team_name}")
         try:
             if team_name in nbaTeams or team_name in nflTeams:
-                # Scrape articles from each source
                 apnews_articles = get_apnews_article_details(get_apnews_articles(team_name))
                 si_articles = extract_si_articles(get_si_article_links(team_name))
                 espn_articles = get_espn_article_details(scrape_espn_articles(team_name))
@@ -170,7 +169,6 @@ def scrape_articles(team_names):
                 print(f"SI articles: {len(si_articles)}")
                 print(f"ESPN articles: {len(espn_articles)}")
                 
-                # Combine all articles as tuples (URL, content)
                 articles.extend(apnews_articles)
                 articles.extend(si_articles)
                 articles.extend(espn_articles)
@@ -181,13 +179,12 @@ def scrape_articles(team_names):
 def copy_articles_to_public():
     try:
         # Define the source and destination paths
-        source = os.path.join(os.getcwd(), 'articles.json')  # Root directory
-        destination = os.path.join(os.getcwd(), 'fanfocus', 'public', 'articles.json')  # Public folder
+        source = os.path.join(os.getcwd(), 'articles.json')
+        destination = os.path.join(os.getcwd(), 'fanfocus', 'public', 'articles.json') 
 
-        # Ensure the destination folder exists
         os.makedirs(os.path.dirname(destination), exist_ok=True)
 
-        # Copy the file
+     
         shutil.copy(source, destination)
         print(f"Copied {source} to {destination}")
     except Exception as e:
@@ -197,27 +194,21 @@ def copy_articles_to_public():
 @app.route('/scrape_articles', methods=['POST'])
 def scrape_articles_route():
     try:
-        # Get the team names from the request
         team_names = request.json.get('teamNames', [])
         print(f"Received teams: {team_names}")
         
-        # Validate input
         if not team_names:
             return jsonify({"error": "No teams provided"}), 400
         
-        # Scrape articles for the selected teams
         articles = scrape_articles(team_names)
         
-        # Transform articles into a JSON serializable format (e.g., list of lists)
         formatted_articles = [list(article) for article in articles]
         
         print(f"Total articles scraped: {len(articles)}")
         
-        # Determine the full file path
         file_path = os.path.join(os.getcwd(), 'articles.json')
         print(f"Attempting to write to: {file_path}")
         
-        # Save the articles to articles.json
         with open(file_path, 'w', encoding='utf-8') as f:
             json.dump(formatted_articles, f, ensure_ascii=False, indent=4)
         
@@ -229,8 +220,8 @@ def scrape_articles_route():
             "file_path": file_path
         })
     except Exception as e:
-        print(f"Error in scrape_articles_route: {str(e)}")  # Add detailed error logging
-        traceback.print_exc()  # Print full stack trace
+        print(f"Error in scrape_articles_route: {str(e)}")  
+        traceback.print_exc()  
         return jsonify({"error": str(e)}), 500
 
 if __name__ == '__main__':
