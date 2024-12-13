@@ -113,13 +113,12 @@ function Profile() {
       });
   
       if (!response.ok) {
-        // Log the status and the response text for debugging
         const text = await response.text();  // Get raw response text
         console.error('Error response:', text);
         throw new Error(`HTTP error! Status: ${response.status}`);
       }
   
-      const data = await response.json();  // This assumes the response is JSON
+      const data = await response.json(); 
       console.log('Key terms update response:', data);
       alert('Key terms updated successfully!');
     } catch (error) {
@@ -174,7 +173,7 @@ function Profile() {
           </div>
         </div>
 
-        {/* Interests Section */}
+
         <div className="interests-section">
           <h2>Your Interests</h2>
           <div className="input-container">
@@ -201,7 +200,7 @@ function Profile() {
           </ul>
         </div>
 
-        {/* Action Buttons */}
+
         <div className="action-buttons">
           <button onClick={fetchArticles}>Fetch Articles</button>
           <button onClick={updateKeyTerms}>Update Key Terms</button>

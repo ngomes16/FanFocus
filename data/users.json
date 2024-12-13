@@ -6,12 +6,17 @@
             "Campbell"
         ],
         "seen_articles": [
-            "144"
+            "56"
         ],
+        "favorite_team": "",
         "upvote_downvote_history": {
             "101": 1,
             "121": 1,
-            "144": 1
+            "144": 1,
+            "13": 1,
+            "10": 0,
+            "34": 1,
+            "56": 1
         }
     }
 }
