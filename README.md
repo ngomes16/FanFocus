@@ -85,7 +85,7 @@ Our UI has two locations, the main viewing page called the home page, and then a
 
 
 # Submission Resources
-- Code Repository: https://github.com/ngomes16/cs410-project
+- Code Repository: https://github.com/ngomes16/FanFocus
 - TextData Entry: https://textdata.org/submissions/67251a2a22ea54f14be32116
 - Video Presentation: https://mediaspace.illinois.edu/media/t/1_t8r72tbv
 
